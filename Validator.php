@@ -263,7 +263,7 @@ class Validator {
         $obj = null;
          eval('$obj= new '.$rule.'('.$value.');');
         
-        if(!GenericStaticDAO::isInDB($obj)){
+        if(!is_null($obj) && !GenericStaticDAO::isInDB($obj)){
             throw new Exception('IS_NOT_IN_DB');
         }
         
