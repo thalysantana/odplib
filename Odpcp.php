@@ -1188,7 +1188,70 @@ class Odpcp {
         
         return $htmlHeader.$htmltabs;
     }
-    
+  
+    public static function paginate($resultset){
+
+        //tabela de assets para montar filtros
+        $pg = (isset($_GET['pg']) && is_numeric($_GET['pg'])?$_GET['pg']:1);
+        $qtdPages = ceil(sizeof($resultset) / CT_ASSET_SEARCH_QTD_BY_PAGE);
+
+        $sliced_list = array_slice($resultset, ($pg-1) * CT_ASSET_SEARCH_QTD_BY_PAGE , CT_ASSET_SEARCH_QTD_BY_PAGE, 1);
+
+        $paginate_qtd = 10;
+        $paginate_first = 10;
+        $paginate_last = null;
+
+        if($qtdPages<=$paginate_qtd){
+            $paginate_first=1;
+            $paginate_last=$qtdPages;
+        }else{
+            //begin
+            if($pg<=($paginate_qtd/2)+1){
+                $paginate_first=1;
+            }elseif($pg> $qtdPages-intval(($paginate_qtd-2)/2)){
+                $paginate_first = $pg - ($paginate_qtd-2) - ($qtdPages - $pg);
+            }else{
+                $paginate_first = $pg- intval(($paginate_qtd-2)/2);
+
+            }
+
+            //end
+            if($pg>($qtdPages-($paginate_qtd/2))){
+                $paginate_last=$qtdPages;
+            }elseif($pg<= ($paginate_qtd/2)){
+                $paginate_last = ($paginate_qtd-1);
+            }else{
+                $paginate_last = $pg+ intval(($paginate_qtd-2)/2)-1;
+            }
+        }
+
+        $index = $paginate_first;
+        echo '<div style="margin: auto; display: table;"><ul class="odpPaginate">';
+
+        if ($pg > 1){
+            echo '<li><a href="'.str_ireplace('pg='.$pg, 'pg='. ($pg-1) ,$_SERVER['REQUEST_URI']).'">&lt;</a></li>';
+        }
+        if ($paginate_first > 1){
+            echo '<li><a href="'.str_ireplace('pg='.$pg, 'pg='. 1 ,$_SERVER['REQUEST_URI']).'">1</a>...</li>';
+        }
+
+        //Imprimir principal
+        while($index <= $paginate_last) {
+            echo '<li><a href="'.str_ireplace('pg='.$pg, 'pg='. $index ,$_SERVER['REQUEST_URI']).'"'.($index==$pg?' class="current"':'').'>'.$index.'</a></li>';
+            $index++;
+        }
+
+        if ($paginate_last < ($qtdPages-1)){
+            echo '<li>...<a href="'.str_ireplace('pg='.$pg, 'pg='. $qtdPages ,$_SERVER['REQUEST_URI']).'">'.$qtdPages.'</a></li>';
+        }
+
+        if ($pg < $qtdPages){
+            echo '<li><a href="'.str_ireplace('pg='.$pg, 'pg='. ($pg+1) ,$_SERVER['REQUEST_URI']).'">&gt;</a></li>';
+        }
+        echo '</ul></div>';
+        
+        return $sliced_list;
+    }
 }
 
 ?>
