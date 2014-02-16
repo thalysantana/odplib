@@ -1196,7 +1196,7 @@ class Odpcp {
         $qtdPages = ceil(sizeof($resultset) / CT_ASSET_SEARCH_QTD_BY_PAGE);
 
         $sliced_list = array_slice($resultset, ($pg-1) * CT_ASSET_SEARCH_QTD_BY_PAGE , CT_ASSET_SEARCH_QTD_BY_PAGE, 1);
-        $url = str_ireplace(array('&pg='.$pg,'pg='.$pg), '', $_SERVER['REQUEST_URI']). (stripos($_SERVER['REQUEST_URI'].'?')?'&pg=':'?pg=');
+        $url = str_ireplace(array('&pg='.$pg,'pg='.$pg), '', $_SERVER['REQUEST_URI']). (stripos($_SERVER['REQUEST_URI'],'?')?'&pg=':'?pg=');
 
         $paginate_qtd = 10;
         $paginate_first = 10;
