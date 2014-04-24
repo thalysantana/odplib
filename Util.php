@@ -188,7 +188,6 @@ class Util {
             if($keyOrValue == 'K'){
                 eval('$aux[$obj->get'.ucwords($property).'()]=null;');
             }else{
-                array_push();
                eval('array_push($aux,$obj->get'.ucwords($property).'());');
             }
         }
